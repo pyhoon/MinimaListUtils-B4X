@@ -1,0 +1,27 @@
+' Delete a key of a resource using DELETE
+Private Sub Delete$Controller$Key (id As Long, Key As String)
+	' #Version = v2
+	' #Desc = Delete a key of an item in $MinimaList$
+	' #Elements = [":id", ":key"]
+
+	If id < 1 Then
+		HRM.ResponseError = "Invalid id value"
+		HRM.ResponseCode = 404
+	Else
+		Dim Index As Int = Main.$MinimaList$.IndexFromId(id)
+		If Index < 0 Then
+			HRM.ResponseError = "$Controller$ not found"
+			HRM.ResponseCode = 404
+		Else
+			If Main.$MinimaList$.List.Get(Index).As(Map).ContainsKey(Key) Then
+				Main.$MinimaList$.RemoveKey(Key, Index)
+				HRM.ResponseCode = 200
+				If Main.KVS_ENABLED Then Main.WriteKVS("$MinimaList$", Main.$MinimaList$)
+			Else
+				HRM.ResponseError = "Invalid key value"
+				HRM.ResponseCode = 404
+			End If
+		End If
+	End If
+	ReturnApiResponse
+End Sub

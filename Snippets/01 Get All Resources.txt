@@ -1,0 +1,10 @@
+' Retrieve all resources using GET
+Private Sub Get$Controller$s
+	' #Plural = $Controller$s
+	' #Version = v2
+	' #Desc = Read all $Controller$s
+
+	HRM.ResponseCode = 200
+	HRM.ResponseData = Main.$MinimaList$.List
+	ReturnApiResponse
+End Sub

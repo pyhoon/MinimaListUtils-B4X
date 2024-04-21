@@ -1,0 +1,16 @@
+' Retrieve a resource by id using GET
+Private Sub Get$Controller$ (id As Long)
+	' #Plural = $Controller$s
+	' #Version = v2
+	' #Desc = Read one $Controller$ by id
+	' #Elements = [":id"]
+
+	Dim M1 As Map = Main.$MinimaList$.Find(id)
+	If M1.Size > 0 Then
+		HRM.ResponseCode = 200
+	Else
+		HRM.ResponseCode = 404
+	End If
+	HRM.ResponseObject = M1
+	ReturnApiResponse
+End Sub
