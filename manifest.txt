@@ -1,3 +1,3 @@
 Author=Aeric
-Version=1.02
+Version=1.03
 DependsOn=KeyValueStore

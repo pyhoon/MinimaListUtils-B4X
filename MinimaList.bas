@@ -5,14 +5,15 @@ Type=Class
 Version=9.8
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.02
-' 2023-06-09 Added code sample when hover Sub Initialize
-' 2023-07-31 Added Count, Find, FindFirst and FindAll subs
-' 2023-08-16 Updated FindFirst and FindAll subs
-' 2023-09-19 Added FindAnyLike sub
-' 2023-10-18 Packaged as B4Xlib with Controller code snippet
-' 2023-10-24 Added Exclude, ExcludeAll and ExcludeAny subs, remove mMap
+' Version		: 1.03
+' 2024-04-24 Update Snippets, removed #plural tag
 ' 2023-12-09 Added CopyList
+' 2023-10-24 Added Exclude, ExcludeAll and ExcludeAny subs, remove mMap
+' 2023-10-18 Packaged as B4Xlib with Controller code snippet
+' 2023-09-19 Added FindAnyLike sub
+' 2023-08-16 Updated FindFirst and FindAll subs
+' 2023-07-31 Added Count, Find, FindFirst and FindAll subs
+' 2023-06-09 Added code sample when hover Sub Initialize
 Sub Class_Globals
 	Private mList As List
 	Private mFirst As Map

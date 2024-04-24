@@ -1,11 +1,10 @@
 ' Retrieve a resource by id using GET
 Private Sub Get$Controller$ (id As Long)
-	' #Plural = $Controller$s
 	' #Version = v2
-	' #Desc = Read one $Controller$ by id
+	' #Desc = Read one item in $Controller$ by id
 	' #Elements = [":id"]
 
-	Dim M1 As Map = Main.$MinimaList$.Find(id)
+	Dim M1 As Map = Main.$Controller$List.Find(id)
 	If M1.Size > 0 Then
 		HRM.ResponseCode = 200
 	Else
