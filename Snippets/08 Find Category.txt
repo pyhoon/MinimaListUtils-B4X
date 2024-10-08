@@ -7,7 +7,7 @@ Private Sub GetFindCategory (keyword As String, value As String)
 	L1.Initialize
 	Select keyword
 		Case "category_name", "name"
-			L1 = Main.CategoryList.FindAll(Array("category_name"), Array As String(value))
+			L1 = Main.CategoryList.FindByKey("category_name", value)
 			HRM.ResponseCode = 200
 			HRM.ResponseData = L1
 		Case Else

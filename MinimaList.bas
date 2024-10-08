@@ -2,10 +2,11 @@
 Group=Modules
 ModulesStructureVersion=1
 Type=Class
-Version=9.8
+Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.03
+' Version		: 1.04
+' 2024-10-08 Added Reverse, FindByKey, SortByKey, Snippet 08
 ' 2024-04-24 Update Snippets, removed #plural tag
 ' 2023-12-09 Added CopyList
 ' 2023-10-24 Added Exclude, ExcludeAll and ExcludeAny subs, remove mMap
@@ -81,10 +82,10 @@ Public Sub Count (key As String, id As Long) As Int
 	Return num
 End Sub
 
-' Remove item by Index
-Public Sub Remove (Index As Long)
+' Remove item by index
+Public Sub Remove (index As Long)
 	If mList.Size > 0 Then
-		mList.RemoveAt(Index)
+		mList.RemoveAt(index)
 	End If
 	If mList.Size = 0 Then
 		mFirst.Clear
@@ -98,14 +99,13 @@ End Sub
 ' Remove item by passing a Map object
 Public Sub Remove2 (M As Map)
 	If mList.Size > 0 Then
-		Dim Index As Long
-		For Each O As Map In mList
+		For i = 0 To mList.Size - 1
+			Dim O As Map = mList.Get(i)
 			If O.Get("id") = M.Get("id") Then
 				'LogDebug("Found")
-				mList.RemoveAt(Index)
+				mList.RemoveAt(i)
 				Exit
 			End If
-			Index = Index + 1
 		Next
 	End If
 
@@ -118,18 +118,18 @@ Public Sub Remove2 (M As Map)
 	End If
 End Sub
 
-' Remove key in Map by Index
-Public Sub RemoveKey (Key As String, Index As Long)
-	Dim M As Map = mList.Get(Index)
-	If M.ContainsKey(Key) Then
-		M.Remove(Key)
+' Remove key in Map by index
+Public Sub RemoveKey (key As String, index As Long)
+	Dim M As Map = mList.Get(index)
+	If M.ContainsKey(key) Then
+		M.Remove(key)
 	End If
 End Sub
 
 ' Remove key in Map by passing a Map object
-Public Sub RemoveKey2 (Key As String, M As Map)
-	If M.ContainsKey(Key) Then
-		M.Remove(Key)
+Public Sub RemoveKey2 (key As String, M As Map)
+	If M.ContainsKey(key) Then
+		M.Remove(key)
 	End If
 End Sub
 
@@ -201,13 +201,11 @@ Public Sub FindAll (keys As List, values As List) As List
 		For k = 0 To keys.Size - 1
 			If temp.Get(keys.Get(k)).As(String).ToLowerCase = values.Get(k).As(String).ToLowerCase Then
 				matched = True
-				'index = i
 			Else
 				matched = False
 				Exit
 			End If
 		Next
-		'If matched Then result.Add(mList.Get(index))
 		If matched Then result.Add(mList.Get(i))
 	Next
 	Return result
@@ -215,7 +213,6 @@ End Sub
 
 ' Find more than one item as list where at least one key and value matched
 Public Sub FindAnyLike (keys As List, values As List) As List
-	'Dim index As Int = -1
 	Dim result As List
 	result.Initialize
 	For i = 0 To mList.Size - 1
@@ -224,10 +221,8 @@ Public Sub FindAnyLike (keys As List, values As List) As List
 		For k = 0 To keys.Size - 1
 			If temp.Get(keys.Get(k)).As(String).ToLowerCase.Contains(values.Get(k).As(String).ToLowerCase) Then
 				matched = True
-				'index = i
 			End If
 		Next
-		'If matched Then result.Add(mList.Get(index))
 		If matched Then result.Add(mList.Get(i))
 	Next
 	Return result
@@ -277,4 +272,38 @@ Public Sub ExcludeAny (keys As List, values As List) As List
 		If matched Then mList.RemoveAt(i)
 	Next
 	Return mList
+End Sub
+
+Public Sub Reverse
+	Dim sList As List
+	sList.Initialize
+	For i = mList.Size - 1 To 0 Step - 1
+		sList.Add(mList.Get(i))
+	Next
+	setList(sList)
+End Sub
+
+' Find first item based on any key
+Public Sub FindByKey (key As String, value As Object) As Map
+	For Each M As Map In mList
+		If value = M.Get(key) Then
+			Return M
+		End If
+	Next
+	Return CreateMap()
+End Sub
+
+Public Sub SortByKey (key As String, ascending As Boolean)
+	Dim sorted As List
+	sorted.Initialize
+	For i = 0 To mList.Size - 1
+		sorted.Add(mList.Get(i).As(Map).Get(key))
+	Next
+	sorted.Sort(ascending)
+	Dim sList As List
+	sList.Initialize
+	For i = 0 To sorted.Size - 1
+		sList.Add(FindByKey(key, sorted.Get(i)))
+	Next
+	setList(sList)
 End Sub
