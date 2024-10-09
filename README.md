@@ -1,5 +1,5 @@
 # MinimaListUtils-B4X
-Version: 1.04 \
+Version: 1.05 \
 A utility class to manipulate a simple List of Map to do basic CRUD.
 
 It depends on **KeyValueStore** library.\
@@ -16,7 +16,8 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 
 **Methods**
 - Add (M As Map)
-- CopyList As Object
+- CopyList As List
+- CopyObject (xo As Object) As Object
 - Count (key As String, id As Long) As Int
 - Exclude (id As Long) As List
 - ExcludeAll (keys As List, values As List) As List
@@ -36,6 +37,10 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 - SortByKey (key As String, ascending As Boolean)
 
 **What's New**
+- Version 1.05
+  - Fix bug in SortByKey
+  - Added CopyObject
+  - Update CopyList
 - Version 1.04
   - Added Reverse, FindByKey, SortByKey
   - Updated Snippet 08

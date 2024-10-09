@@ -5,7 +5,8 @@ Type=Class
 Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.04
+' Version		: 1.05
+' 2024-10-09 Update CopyList, Added CopyObject, Fix bug in SortByKey
 ' 2024-10-08 Added Reverse, FindByKey, SortByKey, Snippet 08
 ' 2024-04-24 Update Snippets, removed #plural tag
 ' 2023-12-09 Added CopyList
@@ -19,6 +20,7 @@ Sub Class_Globals
 	Private mList As List
 	Private mFirst As Map
 	Private mLast As Map
+	Type mType (id As Int, key As Object)
 End Sub
 
 Public Sub Initialize
@@ -64,9 +66,15 @@ Public Sub Add (M As Map)
 End Sub
 
 ' Make a copy of the List
-Public Sub CopyList As Object
+Public Sub CopyList As List
 	Dim ser As B4XSerializator
 	Return ser.ConvertBytesToObject(ser.ConvertObjectToBytes(mList))
+End Sub
+
+' Make a copy of an Object/Map
+Public Sub CopyObject (xo As Object) As Object
+	Dim ser As B4XSerializator
+	Return ser.ConvertBytesToObject(ser.ConvertObjectToBytes(xo))
 End Sub
 
 ' Count items where value of a key is equals to id
@@ -151,7 +159,6 @@ Public Sub IndexFromId (id As Long) As Long
 	Dim Index As Long
 	For Each O As Map In mList
 		If id = O.Get("id") Then
-			'LogDebug("Found")
 			Return Index
 		End If
 		Index = Index + 1
@@ -296,14 +303,23 @@ End Sub
 Public Sub SortByKey (key As String, ascending As Boolean)
 	Dim sorted As List
 	sorted.Initialize
-	For i = 0 To mList.Size - 1
-		sorted.Add(mList.Get(i).As(Map).Get(key))
+	For h = 0 To mList.Size - 1
+		sorted.Add(CreatemType(mList.Get(h).As(Map).Get("id"), mList.Get(h).As(Map).Get(key)))
 	Next
-	sorted.Sort(ascending)
+	sorted.SortType("key", ascending)
 	Dim sList As List
 	sList.Initialize
 	For i = 0 To sorted.Size - 1
-		sList.Add(FindByKey(key, sorted.Get(i)))
+		Dim m1 As Map = CopyObject(Find(sorted.Get(i).As(mType).id)) ' don't use FindByKey
+		sList.Add(m1)
 	Next
 	setList(sList)
+End Sub
+
+Private Sub CreatemType (id As Int, key As Object) As mType
+	Dim t1 As mType
+	t1.Initialize
+	t1.id = id
+	t1.key = key
+	Return t1
 End Sub
