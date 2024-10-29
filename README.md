@@ -1,22 +1,28 @@
 # MinimaListUtils-B4X
-Version: 1.05 \
+Version: 1.06 \
 A utility class to manipulate a simple List of Map to do basic CRUD.
 
+Treat it as some kind of a NoSQL for key-value pairs.\
+It is suitable for small demo if you don't want to use SQL database.
+
 It depends on **KeyValueStore** library.\
-This b4xlib replaces the class from MinimaList published in B4J code snippet.
+Note: You can remove this dependency and use File.WriteBytes and File.ReadBytes.
+
+This b4xlib replaces the class from MinimaList formerly published in B4J code snippet.
 
 Code snippets also included for creating RESTful API subs for MinimaList Controller when developing with Web API Template 2.04+.
 
 ---
 
 **Properties**
-- First As Map (read)
-- Last As Map (read)
-- List (read/write)
+- First As Map (read/write)
+- Last As Map (read/write)
+- List (read/write)-
 
 **Methods**
 - Add (M As Map)
-- CopyList As List
+- Clone As MinimaList
+- CopyList As Object
 - CopyObject (xo As Object) As Object
 - Count (key As String, id As Long) As Int
 - Exclude (id As Long) As List
@@ -33,10 +39,17 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 - Remove2 (M As Map)
 - RemoveKey (key As String, index As Long)
 - RemoveKey2 (key As String, M As Map)
-- Reverse
+- Reverse As MinimaList
 - SortByKey (key As String, ascending As Boolean)
+- SortByKey2 (key As String, ascending As Boolean, default As Object)
 
 **What's New**
+- Version 1.06
+  - Added Clone
+  - Update Reverse return the resulted object
+  - Update SortByKey
+  - Added SortByKey2
+  - First and Last properties are now writable
 - Version 1.05
   - Fix bug in SortByKey
   - Added CopyObject
