@@ -17,7 +17,7 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 **Properties**
 - First As Map (read/write)
 - Last As Map (read/write)
-- List (read/write)-
+- List (read/write)
 
 **Methods**
 - Add (M As Map)
