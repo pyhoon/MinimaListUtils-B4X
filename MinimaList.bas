@@ -5,7 +5,9 @@ Type=Class
 Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.05
+' Version		: 1.06
+' 2024-10-27 Added Clone, update Reverse return the resulted object
+' 2024-10-10 Update SortByKey, Added SortByKey2
 ' 2024-10-09 Update CopyList, Added CopyObject, Fix bug in SortByKey
 ' 2024-10-08 Added Reverse, FindByKey, SortByKey, Snippet 08
 ' 2024-04-24 Update Snippets, removed #plural tag
@@ -41,9 +43,19 @@ Public Sub getList As List
 	Return mList
 End Sub
 
+' Set First item
+Public Sub setFirst (M As Map)
+	mFirst = M
+End Sub
+
 ' Get First item
 Public Sub getFirst As Map
 	Return mFirst
+End Sub
+
+' Set Last item
+Public Sub setLast (M As Map)
+	mLast = M
 End Sub
 
 ' Get Last item
@@ -63,6 +75,16 @@ Public Sub Add (M As Map)
 	M.Put("id", id)
 	mList.Add(M)
 	mLast = M
+End Sub
+
+' Make a clone of MinimaList
+Public Sub Clone As MinimaList
+	Dim TempList As MinimaList
+	TempList.Initialize
+	TempList.List = CopyList
+	TempList.First = CopyObject(mFirst)
+	TempList.Last = CopyObject(mLast)
+	Return TempList
 End Sub
 
 ' Make a copy of the List
@@ -110,7 +132,6 @@ Public Sub Remove2 (M As Map)
 		For i = 0 To mList.Size - 1
 			Dim O As Map = mList.Get(i)
 			If O.Get("id") = M.Get("id") Then
-				'LogDebug("Found")
 				mList.RemoveAt(i)
 				Exit
 			End If
@@ -146,7 +167,6 @@ Public Sub IndexFromMap (M As Map) As Long
 	Dim Index As Long
 	For Each O As Map In mList
 		If O.Get("id") = M.Get("id") Then
-			'LogDebug("Found")
 			Return Index
 		End If
 		Index = Index + 1
@@ -281,13 +301,14 @@ Public Sub ExcludeAny (keys As List, values As List) As List
 	Return mList
 End Sub
 
-Public Sub Reverse
+Public Sub Reverse As MinimaList
 	Dim sList As List
 	sList.Initialize
 	For i = mList.Size - 1 To 0 Step - 1
 		sList.Add(mList.Get(i))
 	Next
 	setList(sList)
+	Return Me
 End Sub
 
 ' Find first item based on any key
@@ -300,18 +321,45 @@ Public Sub FindByKey (key As String, value As Object) As Map
 	Return CreateMap()
 End Sub
 
+' Assume all items contain key to sort
 Public Sub SortByKey (key As String, ascending As Boolean)
 	Dim sorted As List
 	sorted.Initialize
 	For h = 0 To mList.Size - 1
-		sorted.Add(CreatemType(mList.Get(h).As(Map).Get("id"), mList.Get(h).As(Map).Get(key)))
+		Dim m1 As Map = mList.Get(h)
+		sorted.Add(CreatemType(m1.Get("id"), m1.Get(key)))
 	Next
 	sorted.SortType("key", ascending)
 	Dim sList As List
 	sList.Initialize
 	For i = 0 To sorted.Size - 1
-		Dim m1 As Map = CopyObject(Find(sorted.Get(i).As(mType).id)) ' don't use FindByKey
-		sList.Add(m1)
+		Dim mt As mType = sorted.Get(i)
+		Dim m2 As Map = CopyObject(Find(mt.id)) ' don't use FindByKey
+		sList.Add(m2)
+	Next
+	setList(sList)
+End Sub
+
+' Put default value if key does not exist
+Public Sub SortByKey2 (key As String, ascending As Boolean, default As Object)
+	Dim sorted As List
+	sorted.Initialize
+	For h = 0 To mList.Size - 1
+		Dim m1 As Map = mList.Get(h)
+		If m1.ContainsKey(key) Then
+			default = m1.GetDefault(key, default)
+		Else
+			m1.Put(key, default)
+		End If
+		sorted.Add(CreatemType(m1.Get("id"), default))
+	Next
+	sorted.SortType("key", ascending)
+	Dim sList As List
+	sList.Initialize
+	For i = 0 To sorted.Size - 1
+		Dim mt As mType = sorted.Get(i)
+		Dim m2 As Map = CopyObject(Find(mt.id))
+		sList.Add(m2)
 	Next
 	setList(sList)
 End Sub

@@ -1,5 +1,4 @@
 Private Sub GetFindCategory (keyword As String, value As String)
-	' #Version = v2
 	' #Desc = Find Category by name
 	' #Elements = ["category", ":keyword", ":value"]
 

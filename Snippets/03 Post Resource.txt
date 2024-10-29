@@ -1,6 +1,5 @@
 ' Create new resource using POST
 Private Sub Post$Controller$
-	' #Version = v2
 	' #Desc = Add a new item into $Controller$
 	' #Body = {<br>&nbsp; "key1": "value1",<br>&nbsp; "key2": "value2"<br>}
 

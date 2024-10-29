@@ -1,6 +1,5 @@
 ' Remove the resource by id using DELETE
 Private Sub Delete$Controller$ (id As Long)
-	' #Version = v2
 	' #Desc = Remove an item in $Controller$List by Id
 	' #Elements = [":id"]
 

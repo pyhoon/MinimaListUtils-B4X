@@ -1,6 +1,5 @@
 ' Retrieve a resource by id using GET
 Private Sub Get$Controller$ (id As Long)
-	' #Version = v2
 	' #Desc = Read one item in $Controller$ by id
 	' #Elements = [":id"]
 

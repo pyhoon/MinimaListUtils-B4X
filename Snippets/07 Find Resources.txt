@@ -1,5 +1,4 @@
 Private Sub GetFind$Resource$ (keyword As String, value As String)
-	' #Version = v2
 	' #Desc = Find $Resource$ by id, cid, code or name
 	' #Elements = ["$resource$", ":keyword", ":value"]
 

@@ -1,6 +1,5 @@
 ' Retrieve all resources using GET
 Private Sub Get$Controller$
-	' #Version = v2
 	' #Desc = Read all items in $Controller$
 
 	HRM.ResponseCode = 200

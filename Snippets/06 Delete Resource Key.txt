@@ -1,6 +1,5 @@
 ' Delete a key of a resource using DELETE
 Private Sub Delete$Controller$Key (id As Long, Key As String)
-	' #Version = v2
 	' #Desc = Delete a key of an item in $Controller$List
 	' #Elements = [":id", ":key"]
 
