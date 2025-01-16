@@ -5,7 +5,8 @@ Type=Class
 Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.06
+' Version		: 1.07
+' 2024-10-29 Added Limit, replace dependency of KeyValueStore to RandomAccessFile
 ' 2024-10-27 Added Clone, update Reverse return the resulted object
 ' 2024-10-10 Update SortByKey, Added SortByKey2
 ' 2024-10-09 Update CopyList, Added CopyObject, Fix bug in SortByKey
@@ -309,6 +310,22 @@ Public Sub Reverse As MinimaList
 	Next
 	setList(sList)
 	Return Me
+End Sub
+
+Public Sub Limit (Number As Int) As MinimaList
+	Dim OldList As List = CopyList
+	If Number > OldList.Size Then Number = OldList.Size
+	Dim TempList As List
+	TempList.Initialize
+	For i = 0 To Number - 1
+		TempList.Add(OldList.Get(i))
+	Next
+	Dim NewList As MinimaList
+	NewList.Initialize
+	NewList.List = TempList
+	NewList.First = NewList.List.Get(0)
+	NewList.Last = NewList.List.Get(NewList.List.Size-1)
+	Return NewList
 End Sub
 
 ' Find first item based on any key

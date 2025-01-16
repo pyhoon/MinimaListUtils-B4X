@@ -1,3 +1,5 @@
 Author=Aeric
-Version=1.06
-DependsOn=KeyValueStore
+Version=1.07
+B4A.DependsOn=RandomAccessFile
+B4i.DependsOn=iRandomAccessFile
+B4J.DependsOn=jRandomAccessFile
