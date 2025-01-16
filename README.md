@@ -35,6 +35,7 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 - FindFirst (keys As List, values As List) As Map
 - IndexFromId (id As Long) As Long
 - IndexFromMap (M As Map) As Long
+- Limit (Number As Int) As MinimaList
 - Remove (index As Long)
 - Remove2 (M As Map)
 - RemoveKey (key As String, index As Long)
