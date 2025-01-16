@@ -5,8 +5,8 @@ A utility class to manipulate a simple List of Map to do basic CRUD.
 Treat it as some kind of a NoSQL for key-value pairs.\
 It is suitable for small demo if you don't want to use SQL database.
 
-It depends on **KeyValueStore** library.\
-Note: You can remove this dependency and use File.WriteBytes and File.ReadBytes.
+It depends on **RandomAccessFile** library.\
+Note: You can use File.WriteBytes and File.ReadBytes to write to and read from a file.
 
 This b4xlib replaces the class from MinimaList formerly published in B4J code snippet.
 
