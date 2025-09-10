@@ -5,7 +5,8 @@ Type=Class
 Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.07
+' Version		: 1.80
+' 2025-07-10 Added Contains, renamed CreatemType to CreateType
 ' 2024-10-29 Added Limit, replace dependency of KeyValueStore to RandomAccessFile
 ' 2024-10-27 Added Clone, update Reverse return the resulted object
 ' 2024-10-10 Update SortByKey, Added SortByKey2
@@ -338,13 +339,21 @@ Public Sub FindByKey (key As String, value As Object) As Map
 	Return CreateMap()
 End Sub
 
+' Check list contains specified key
+Public Sub ContainsKey (key As String) As Boolean
+	For Each M As Map In mList
+		If M.ContainsKey(key) Then Return True
+	Next
+	Return False
+End Sub
+
 ' Assume all items contain key to sort
 Public Sub SortByKey (key As String, ascending As Boolean)
 	Dim sorted As List
 	sorted.Initialize
 	For h = 0 To mList.Size - 1
 		Dim m1 As Map = mList.Get(h)
-		sorted.Add(CreatemType(m1.Get("id"), m1.Get(key)))
+		sorted.Add(CreateType(m1.Get("id"), m1.Get(key)))
 	Next
 	sorted.SortType("key", ascending)
 	Dim sList As List
@@ -368,20 +377,20 @@ Public Sub SortByKey2 (key As String, ascending As Boolean, default As Object)
 		Else
 			m1.Put(key, default)
 		End If
-		sorted.Add(CreatemType(m1.Get("id"), default))
+		sorted.Add(CreateType(m1.Get("id"), default))
 	Next
 	sorted.SortType("key", ascending)
 	Dim sList As List
 	sList.Initialize
 	For i = 0 To sorted.Size - 1
-		Dim mt As mType = sorted.Get(i)
-		Dim m2 As Map = CopyObject(Find(mt.id))
+		Dim t1 As mType = sorted.Get(i)
+		Dim m2 As Map = CopyObject(Find(t1.id))
 		sList.Add(m2)
 	Next
 	setList(sList)
 End Sub
 
-Private Sub CreatemType (id As Int, key As Object) As mType
+Private Sub CreateType (id As Int, key As Object) As mType
 	Dim t1 As mType
 	t1.Initialize
 	t1.id = id
