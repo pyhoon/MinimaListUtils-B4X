@@ -1,5 +1,5 @@
 # MinimaListUtils-B4X
-Version: 1.07 \
+Version: 1.80 \
 A utility class to manipulate a simple List of Map to do basic CRUD.
 
 Treat it as some kind of a NoSQL for key-value pairs.\
@@ -22,6 +22,7 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 **Methods**
 - Add (M As Map)
 - Clone As MinimaList
+- ContainsKey (key As String) As Boolean
 - CopyList As Object
 - CopyObject (xo As Object) As Object
 - Count (key As String, id As Long) As Int
@@ -45,6 +46,9 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 - SortByKey2 (key As String, ascending As Boolean, default As Object)
 
 **What's New**
+- Version 1.80
+  - Added ContainsKey
+  - Renamed CreatemType to CreateType
 - Version 1.07
   - Added Limit
   - Replace dependency of KeyValueStore to RandomAccessFile
