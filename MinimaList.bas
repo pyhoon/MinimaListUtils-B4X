@@ -6,7 +6,7 @@ Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
 ' Version		: 1.80
-' 2025-07-10 Added Contains, renamed CreatemType to CreateType
+' 2025-07-10 Added ContainsKey, renamed CreatemType to CreateType
 ' 2024-10-29 Added Limit, replace dependency of KeyValueStore to RandomAccessFile
 ' 2024-10-27 Added Clone, update Reverse return the resulted object
 ' 2024-10-10 Update SortByKey, Added SortByKey2
