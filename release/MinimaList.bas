@@ -5,7 +5,8 @@ Type=Class
 Version=10
 @EndOfDesignText@
 ' Description	: Minimal List of Maps
-' Version		: 1.80
+' Version		: 2.00
+' 2025-09-19 Update Clone
 ' 2025-07-10 Added ContainsKey, renamed CreatemType to CreateType
 ' 2024-10-29 Added Limit, replace dependency of KeyValueStore to RandomAccessFile
 ' 2024-10-27 Added Clone, update Reverse return the resulted object
@@ -83,9 +84,12 @@ End Sub
 Public Sub Clone As MinimaList
 	Dim TempList As MinimaList
 	TempList.Initialize
-	TempList.List = CopyList
-	TempList.First = CopyObject(mFirst)
-	TempList.Last = CopyObject(mLast)
+	Dim NewList As List = CopyList
+	TempList.List = NewList
+	If NewList.Size > 0 Then
+		TempList.First = NewList.Get(0)
+		TempList.Last = NewList.Get(NewList.Size - 1)
+	End If
 	Return TempList
 End Sub
 
