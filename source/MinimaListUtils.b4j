@@ -1,0 +1,251 @@
+﻿AppType=StandardJava
+Build1=Default,b4j.example
+Group=Default Group
+Library1=jcore
+Library2=jrandomaccessfile
+Module1=MinimaList
+NumberOfFiles=0
+NumberOfLibraries=2
+NumberOfModules=1
+Version=10.3
+@EndOfDesignText@
+'Non-UI application (console / server application)
+#Region Project Attributes 
+	#CommandLineArgs:
+	#MergeLibraries: True
+	#Macro: Title, Copy, ide://run?file=%WINDIR%\System32\cmd.exe&Args=/c&Args=copy&Args=%PROJECT%\MinimaList.bas&Args=%PROJECT%\..\release\MinimaList.bas
+	#Macro: Title, Release, ide://run?file=%WINDIR%\SysWOW64\explorer.exe&Args=%PROJECT%\..\release
+	#Macro: Title, Publish, ide://run?file=%JAVABIN%\jar.exe&WorkingDirectory=..\..\release&Args=-cMf&Args=%ADDITIONAL%\..\B4X\%PROJECT_NAME%.b4xlib&Args=*
+#End Region
+
+Sub Process_Globals
+	'Type Member (name As String, age As Int)
+	'Type Person(Group As Int, Name As String, Address As String, City As String, Age As Int)
+	'Private missing As Int = -1
+End Sub
+
+Sub AppStart (Args() As String)
+	'Test1
+	'Test2
+	'Test3
+	Test4
+	'Example
+End Sub
+
+'Sub Contains (mList As List, mItem As Object) As Boolean
+'	'Log(item)
+'	Return mList.IndexOf(mItem) <> -1
+'	'Return mList.Contains(item)
+'End Sub
+
+'Sub Test1 'ignore
+'	'Dim myList As MinimaList
+'
+'	Dim item1 As Map = CreateMap("a": 1)
+'	Dim item2 As Map = CreateMap("a": 2)
+'	Log("item1=" & item1)				'{a=1}
+'	Log("item2=" & item2)				'{a=2}
+'	
+'	Dim myList As List
+'	myList.Initialize
+'	myList.Add(item1)
+'	myList.Add(item2)
+'	Log(myList)							'[{a=1}, {a=2}]
+'	
+'	Dim item3 As Map = CreateMap("a": 1)
+'	Dim item4 As Map = CreateMap("a": 2)
+'	Log("item3=" & item3)				'{a=1}
+'	Log("item4=" & item4)				'{a=2}
+'	
+'	Log(myList.IndexOf(item1) <> -1)	'true
+'	Log(myList.IndexOf(item2) <> -1)	'true
+'	Log(myList.IndexOf(item3) <> -1)	'false
+'	Log(myList.IndexOf(item4) <> -1)	'false
+'	
+'	Log(myList.IndexOf(item3) <> -1)				'false
+'	Log(myList.IndexOf(CreateMap("a": 1)) <> -1)	'false
+'	
+'	'Log(Contains(myList, item3))
+'	'Log(Contains(myList, item4))
+'	
+'	'Log(item)
+'	
+'
+'	'myList.Add(CreateMap("a": 1))
+'	'myList.Add(CreateMap("b": 2))
+'	
+'	'Log(myList.Contains(item))
+'	'Log(myList.Contains(CreateMap("a": 1)))
+'	'Log(Contains(myList, CreateMap("a": 1)))
+'	
+''	Dim item3 As Map = CreateMap("a": 1, "id": 1)
+''	Dim item4 As Map = CreateMap("a": 2, "id": 2)
+'
+'	
+''	Log("item1: " & myList.Contains(item1) & " " & item1)
+''	Log("item2: " & myList.Contains(item2) & " " & item2)
+''	Log("item3: " & myList.Contains(item3) & " " & item3)
+''	Log("item4: " & myList.Contains(item4) & " " & item4)
+'	'Log("item1: " & myList.Count("id", 1) & " " & item1)
+'	'Log("item2: " & myList.Count("id", 2) & " " & item2)
+'End Sub
+
+'Sub Test2 'ignore
+'	Dim Members As List
+'	Members.Initialize
+'	Members.Add(CreateMember("aeric", 21))
+'	Members.Add(CreateMember("mario", 18))
+'
+'	Dim Person As Member
+'	Person.Initialize
+'	Person.name = "aeric"
+'	Person.age = 21
+'
+'	Log("index=" & Members.IndexOf(Person))
+'
+'	Dim MinimaMembers As MinimaList
+'	MinimaMembers.Initialize
+'	MinimaMembers.Add(CreateMap("name": "aeric", "age": 21))
+'	MinimaMembers.Add(CreateMap("name": "mario", "age": 18))
+'	MinimaMembers.Add(CreateMap("name": "john", "age": 30))
+'	Log(MinimaMembers.Last)
+'	
+'	MinimaMembers.Reverse
+'	Log(MinimaMembers.Last)
+'	
+'	MinimaMembers.SortByKey("name", True)
+'	Log(MinimaMembers.Last)
+'	
+'	MinimaMembers.SortByKey("age", False)
+'	Log(MinimaMembers.First)
+'End Sub
+
+'Sub Test3
+'	Dim names1() As String = Array As String("John", "Alice", "Anne", "Michael", "Gordon", "William") 'groups need not be the same size
+'	'Dim names2() As String = Array As String("Alphonse", "Mark", "Louise", "Pamela")
+'	Dim missing As Int = -1
+'	Dim group(1) As List
+'	group(0).Initialize		'now we can add individuals to each group list
+'	
+'	'add these persons to groups 0 and 1
+'	For Each pname As String In names1
+'		Dim age As Int = Rnd(18, 90)
+'		If age Mod 2 = 0 Then age = missing
+'		group(0).Add(CreatePerson(0, pname, "", "", age))
+'	Next
+'	group(0).Get(1).As(Person).Age = 22
+'	group(0).SortType("Age", True)
+'	
+'	'show group(0) individuals
+'	Log($"Name${TAB}Age${TAB}Group"$)
+'	Log(TAB)
+'	For Each indiv As Person In group(0)
+'		Log(indiv.Name & TAB & IIf(indiv.Age=missing, "-", indiv.age) & TAB & indiv.group)
+'	Next
+'	
+'	Dim Persons As MinimaList
+'	Persons.Initialize
+'	For Each person As Person In group(0)
+'		Persons.Add(CreateMap("Person": person))
+'	Next
+'	
+'	Log(TAB)
+'	Log($"Name${TAB}Age${TAB}Group"$)
+'	For Each p As Map In Persons.List
+'		Dim p1 As Person = p.Get("Person").As(Person)
+'		Log(p1.Name & TAB & IIf(p1.Age = missing, "-", p1.Age) & TAB & p1.Group)
+'	Next
+'End Sub
+
+Sub Test4
+	Dim MinimaMembers As MinimaList
+	MinimaMembers.Initialize
+	MinimaMembers.Add(CreateMap("name": "aeric", "age": 21))
+	MinimaMembers.Add(CreateMap("name": "mario", "age": 18))
+	MinimaMembers.Add(CreateMap("name": "john", "age": 30))
+	Log(MinimaMembers.Last)
+	
+	Log(MinimaMembers.ContainsKey("name"))
+	
+	'Log(MinimaMembers.Reverse.Last)
+	'Log(MinimaMembers.Last)
+	
+	'Log(MinimaMembers.Last)
+	Dim Clone1 As MinimaList = MinimaMembers.Clone
+	Log(Clone1.Last)
+	Log(Clone1.Reverse.Last)
+
+	Log(MinimaMembers.Last)
+	
+	Dim Clone1 As MinimaList = MinimaMembers.Clone
+	Dim data As Map = CreateMap("persons": Clone1.List)
+	Dim ser As B4XSerializator
+	File.WriteBytes(File.DirApp, "data", ser.ConvertObjectToBytes(data))
+
+	Dim data As Map = ser.ConvertBytesToObject(File.ReadBytes(File.DirApp, "data"))
+	Dim persons As MinimaList
+	persons.Initialize
+	persons.List = data.Get("persons")
+	Log(persons.FindByKey("name", "aeric"))
+End Sub
+
+'Sub Example 'ignore
+'	Dim Persons As MinimaList
+'	Persons.Initialize
+'	Dim missing As Int = -1
+'	Dim names() As String = Array As String("John", "Alice", "Anne", "Michael", "Gordon", "William")
+'	For Each name As String In names
+'		Dim age As Int = Rnd(18, 90)
+'		If age Mod 2 = 0 Then age = missing
+'		Dim person As Map = CreatePerson(1, name, "", "", age)
+'		Persons.Add(person)
+'	Next
+'	'Persons.Add(CreateMap("Group": 2, "Name": "aeric", "name": "Aeric"))
+'	'Persons.Add(CreateMap("Name": "Aeric"))
+'	
+'	Log($"id${TAB}Name${TAB}Age${TAB}Group"$)
+'	For Each p As Map In Persons.List
+'		Log(p.Get("id") & TAB & p.Get("Name") & TAB & IIf(missing = p.GetDefault("Age", missing), "-", p.Get("Age")) & TAB & p.Get("Group"))
+'	Next
+'	
+'	' Update value
+'	Persons.FindByKey("Name", "Anne").Put("Age", 22)
+'	
+'	' Sort by key
+'	'Persons.SortByKey("Name", True)
+'	Persons.SortByKey2("Age", True, -1)
+'	'Persons.SortByKey2("Name", True, "-")
+'	'Persons.SortByKey2("Group", True, 0)
+'	
+'	Log(TAB)
+'	Log($"id${TAB}Name${TAB}Age${TAB}Group"$)
+'	For Each p As Map In Persons.List
+'		Log(p.Get("id") & TAB & p.Get("Name") & TAB & IIf(missing = p.GetDefault("Age", -1), "-", p.Get("Age")) & TAB & p.Get("Group"))
+'		'Log(p.Get("id") & TAB & p.Get("Name") & TAB & p.Get("Age") & TAB & p.Get("Group"))
+'	Next
+'	
+'	'Log(Persons.Find(7))
+'End Sub
+
+'Sub CreatePerson (Group As Int, Name As String, Address As String, City As String, Age As Int) As Map
+'	Return CreateMap("Group": Group, "Name": Name, "Address": Address, "City": City, "Age": Age)
+'End Sub
+
+'Public Sub CreateMember (name As String, age As Int) As Member
+'	Dim t1 As Member
+'	t1.Initialize
+'	t1.name = name
+'	t1.age = age
+'	Return t1
+'End Sub
+
+'Public Sub CreatePerson (Group As Int, Name As String, Address As String, City As String, Age As Int) As Person
+'	Dim t1 As Person
+'	t1.Initialize
+'	t1.Group = Group
+'	t1.Name = Name
+'	t1.Address = Address
+'	t1.City = City
+'	t1.Age = Age
+'	Return t1
+'End Sub
