@@ -7,7 +7,7 @@ Module1=MinimaList
 NumberOfFiles=0
 NumberOfLibraries=2
 NumberOfModules=1
-Version=10.3
+Version=10.45
 @EndOfDesignText@
 'Non-UI application (console / server application)
 #Region Project Attributes 
@@ -186,7 +186,8 @@ Sub Test4
 	Dim persons As MinimaList
 	persons.Initialize
 	persons.List = data.Get("persons")
-	Log(persons.FindByKey("name", "aeric"))
+	Log(persons.FindByKey("age", 18))
+	Log(MinimaMembers.FindFirst(Array("age"), Array(18)))
 End Sub
 
 'Sub Example 'ignore
