@@ -242,7 +242,7 @@ Public Sub FindAll (keys As List, values As List) As List
 	Return L1
 End Sub
 
-' Find more than one item as list where at least one key and value matched
+' Find more than one item as list where at least value of one key contains given value
 Public Sub FindAnyLike (keys As List, values As List) As List
 	Dim L1 As List
 	L1.Initialize
@@ -251,22 +251,15 @@ Public Sub FindAnyLike (keys As List, values As List) As List
 			Dim key As String = keys.Get(k)
 			Dim value As Object = values.Get(k)
 			If M1.ContainsKey(key) = False Then Exit
-			If IsString(value) Then
-				Dim value1 As String = M1.Get(key)
-				Dim value2 As String = value
-				If mCaseSensitive Then
-					If value1 = value2 Then
-						L1.Add(M1)
-						Exit
-					End If
-				Else
-					If value1.EqualsIgnoreCase(value2) Then
-						L1.Add(M1)
-						Exit
-					End If
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1.Contains(value2) Then
+					L1.Add(M1)
+					Exit
 				End If
 			Else
-				If M1.Get(key) = value Then
+				If value1.ToLowerCase.Contains(value2.ToLowerCase) Then
 					L1.Add(M1)
 					Exit
 				End If
@@ -326,22 +319,15 @@ Public Sub ExcludeAny (keys As List, values As List) As List
 			Dim key As String = keys.Get(k)
 			Dim value As Object = values.Get(k)
 			If M1.ContainsKey(key) = False Then Exit
-			If IsString(value) Then
-				Dim value1 As String = M1.Get(key)
-				Dim value2 As String = value
-				If mCaseSensitive Then
-					If value1 = value2 Then
-						L1.Add(i)
-						Exit
-					End If
-				Else
-					If value1.EqualsIgnoreCase(value2) Then
-						L1.Add(i)
-						Exit
-					End If
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1.Contains(value2) Then
+					L1.Add(i)
+					Exit
 				End If
 			Else
-				If M1.Get(key) = value Then
+				If value1.ToLowerCase.Contains(value2.ToLowerCase) Then
 					L1.Add(i)
 					Exit
 				End If
@@ -432,7 +418,7 @@ End Sub
 Private Sub CreateFromList (L As List) As MinimaList
 	Dim ML As MinimaList
 	ML.Initialize
-	ML.List = L
+	ML.List = CopyObject(L)
 	Return ML
 End Sub
 
