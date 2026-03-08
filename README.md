@@ -1,11 +1,13 @@
 # MinimaListUtils-B4X
-Version: 2.00 \
-A utility class to manipulate a simple List of Map to do basic CRUD.
+Version: 3.00
 
+A utility class to manipulate a simple List of Map to do basic CRUD.\
 Treat it as some kind of a NoSQL for key-value pairs.\
 It is suitable for small demo if you don't want to use SQL database.
 
-It depends on **RandomAccessFile** library.\
+Depends on:
+- **RandomAccessFile**
+
 Note: You can use File.WriteBytes and File.ReadBytes to write to and read from a file.
 
 This b4xlib replaces the class from MinimaList formerly published in B4J code snippet.
@@ -15,17 +17,20 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 ---
 
 **Properties**
-- First As Map (read/write)
-- Last As Map (read/write)
+- First As Map (read)
+- Last As Map (read)
 - List (read/write)
+- CaseSensitive As Boolean (read/write)
 
 **Methods**
 - Add (M As Map)
 - Clone As MinimaList
 - ContainsKey (key As String) As Boolean
 - CopyList As Object
-- CopyObject (xo As Object) As Object
-- Count (key As String, id As Long) As Int
+- CopyObject (O As Object) As Object
+- CountById (key As String, id As Long) As Int
+- CreateFromList (L As List) As MinimaList
+- CreateType (id As Int, value As Object) As mType
 - Exclude (id As Long) As List
 - ExcludeAll (keys As List, values As List) As List
 - ExcludeAny (keys As List, values As List) As List
@@ -37,15 +42,49 @@ Code snippets also included for creating RESTful API subs for MinimaList Control
 - IndexFromId (id As Long) As Long
 - IndexFromMap (M As Map) As Long
 - Limit (Number As Int) As MinimaList
+- Merge (ML As MinimaList, key1 As String, key2 As String) As MinimaList
 - Remove (index As Long)
 - Remove2 (M As Map)
 - RemoveKey (key As String, index As Long)
 - RemoveKey2 (key As String, M As Map)
+- ResetFirstAndLast
 - Reverse As MinimaList
 - SortByKey (key As String, ascending As Boolean)
 - SortByKey2 (key As String, ascending As Boolean, default As Object)
 
 **What's New**
+- Version 3.00
+  - Added Merge sub
+  - Added CaseSensitive property
+  - Added CreateFromList sub (Private)
+  - Added ResetFirstAndLast sub (Private)
+  - First property is now read only
+  - Last property is now read only
+  - Updated List property (write)
+  - Updated Add sub
+  - Updated Clone sub
+  - Replaced Count with CountById and updated
+  - Updated Remove sub
+  - Updated Remove2 sub
+  - Updated RemoveKey sub
+  - Updated IndexFromMap sub
+  - Updated IndexFromId sub
+  - Updated Find sub
+  - Updated FindByKey sub
+  - Updated FindFirst sub
+  - Updated FindAll sub
+  - Updated FindAnyLike sub
+  - Updated Exclude sub
+  - Updated ExcludeAll sub
+  - Updated ExcludeAny sub
+  - Updated Reverse sub
+  - Updated Limit sub
+  - Updated ContainsKey sub
+  - Updated SortByKey sub
+  - Updated SortByKey2 sub
+  - Updated CreateType sub
+  - Added Macros for building B4X library
+  - Added CustomBuildAction
 - Version 2.00
   - Update Clone method
   - Add #Macro tags
