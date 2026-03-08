@@ -106,6 +106,37 @@ Public Sub CopyObject (xo As Object) As Object
 	Return ser.ConvertBytesToObject(ser.ConvertObjectToBytes(xo))
 End Sub
 
+' Merge another MinimaList as a new MinimaList
+Public Sub Merge (ML As MinimaList, key1 As String, key2 As String) As MinimaList
+	Dim L1 As List = CopyObject(mList)
+	Dim L2 As List = CopyObject(ML.List)
+	For Each M1 As Map In L1
+		For Each M2 As Map In L2
+			' Convert to String type
+			Dim value1 As String = M1.Get(key1)
+			Dim value2 As String = M2.Get(key2)
+			If mCaseSensitive Then
+				If value1 = value2 Then
+					For Each key As String In M2.Keys
+						If M1.ContainsKey(key) = False Then
+							M1.Put(key, M2.Get(key))
+						End If
+					Next
+				End If
+			Else
+				If value1.EqualsIgnoreCase(value2) Then
+					For Each key As String In M2.Keys
+						If M1.ContainsKey(key) = False Then
+							M1.Put(key, M2.Get(key))
+						End If
+					Next
+				End If
+			End If
+		Next
+	Next
+	Return CreateFromList(L1)
+End Sub
+
 ' Count items where value of a key is equals to id
 Public Sub CountById (key As String, id As Int) As Int
 	Dim count As Int
@@ -198,16 +229,12 @@ Public Sub FindFirst (keys As List, values As List) As Map
 			Dim key As String = keys.Get(k)
 			Dim value As Object = values.Get(k)
 			If M1.ContainsKey(key) = False Then Exit
-			If IsString(value) Then
-				Dim value1 As String = M1.Get(key)
-				Dim value2 As String = value
-				If mCaseSensitive Then
-					If value1 = value2 Then matched = matched + 1
-				Else
-					If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
-				End If
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1 = value2 Then matched = matched + 1
 			Else
-				If M1.Get(key) = value Then matched = matched + 1
+				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
 			End If
 		Next
 		If matched = keys.Size Then Return M1
@@ -225,16 +252,12 @@ Public Sub FindAll (keys As List, values As List) As List
 			Dim key As String = keys.Get(k)
 			Dim value As Object = values.Get(k)
 			If M1.ContainsKey(key) = False Then Exit
-			If IsString(value) Then
-				Dim value1 As String = M1.Get(key)
-				Dim value2 As String = value
-				If mCaseSensitive Then
-					If value1 = value2 Then matched = matched + 1
-				Else
-					If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
-				End If
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1 = value2 Then matched = matched + 1
 			Else
-				If M1.Get(key) = value Then matched = matched + 1
+				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
 			End If
 		Next
 		If matched = keys.Size Then L1.Add(M1)
@@ -289,16 +312,12 @@ Public Sub ExcludeAll (keys As List, values As List) As List
 			Dim key As String = keys.Get(k)
 			Dim value As Object = values.Get(k)
 			If M1.ContainsKey(key) = False Then Exit
-			If IsString(value) Then
-				Dim value1 As String = M1.Get(key)
-				Dim value2 As String = value
-				If mCaseSensitive Then
-					If value1 = value2 Then matched = matched + 1
-				Else
-					If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
-				End If
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1 = value2 Then matched = matched + 1
 			Else
-				If M1.Get(key) = value Then matched = matched + 1
+				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
 			End If
 		Next
 		If matched = keys.Size Then L1.Add(i)
@@ -410,9 +429,9 @@ Private Sub ResetFirstAndLast
 	End If
 End Sub
 
-Private Sub IsString (O As Object) As Boolean
-	Return Initialized(O) And GetType(O) = "java.lang.String"
-End Sub
+'Private Sub IsString (O As Object) As Boolean
+'	Return Initialized(O) And GetType(O) = "java.lang.String"
+'End Sub
 
 ' Create a new MinimaList from a List
 Private Sub CreateFromList (L As List) As MinimaList
