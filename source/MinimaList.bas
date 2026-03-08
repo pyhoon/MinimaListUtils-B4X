@@ -4,24 +4,6 @@ ModulesStructureVersion=1
 Type=Class
 Version=10
 @EndOfDesignText@
-' Update logs
-' 2026-03-06 Added CreateFromList sub (Private), IsString sub (Private), CaseSensitive property, Updated setList, ExcludeAll, ExcludeAny, CreateType, SortByKey, SortByKey2, Clone, Limit, Replaced Count sub with CountById
-' 2025-09-19 Update Clone
-' 2025-07-10 Added ContainsKey, renamed CreatemType to CreateType
-' 2024-10-29 Added Limit, replace dependency of KeyValueStore to RandomAccessFile
-' 2024-10-27 Added Clone, update Reverse return the resulted object
-' 2024-10-10 Update SortByKey, Added SortByKey2
-' 2024-10-09 Update CopyList, Added CopyObject, Fix bug in SortByKey
-' 2024-10-08 Added Reverse, FindByKey, SortByKey, Snippet 08
-' 2024-04-24 Update Snippets, removed #plural tag
-' 2023-12-09 Added CopyList
-' 2023-10-24 Added Exclude, ExcludeAll and ExcludeAny subs, remove mMap
-' 2023-10-18 Packaged as B4Xlib with Controller code snippet
-' 2023-09-19 Added FindAnyLike sub
-' 2023-08-16 Updated FindFirst and FindAll subs
-' 2023-07-31 Added Count, Find, FindFirst and FindAll subs
-' 2023-06-09 Added code sample when hover Sub Initialize
-
 ' Version 3.00
 ' Minimal List of Maps
 Sub Class_Globals
@@ -36,15 +18,6 @@ Public Sub Initialize
 	mList.Initialize
 	mFirst.Initialize
 	mLast.Initialize
-End Sub
-
-Public Sub setList (L1 As List)
-	mList = L1
-	ResetFirstAndLast
-End Sub
-
-Public Sub getList As List
-	Return mList
 End Sub
 
 ' Set First item
@@ -65,6 +38,15 @@ End Sub
 ' Get Last item
 Public Sub getLast As Map
 	Return mLast
+End Sub
+
+Public Sub setList (L1 As List)
+	mList = L1
+	ResetFirstAndLast
+End Sub
+
+Public Sub getList As List
+	Return mList
 End Sub
 
 Public Sub setCaseSensitive (value As Boolean)
@@ -94,6 +76,14 @@ Public Sub Clone As MinimaList
 	Return CreateFromList(mList)
 End Sub
 
+' Check list contains specified key
+Public Sub ContainsKey (key As String) As Boolean
+	For Each M1 As Map In mList
+		If M1.ContainsKey(key) Then Return True
+	Next
+	Return False
+End Sub
+
 ' Make a copy of the List
 Public Sub CopyList As List
 	Dim ser As B4XSerializator
@@ -101,40 +91,9 @@ Public Sub CopyList As List
 End Sub
 
 ' Make a copy of an Object/Map
-Public Sub CopyObject (xo As Object) As Object
+Public Sub CopyObject (O As Object) As Object
 	Dim ser As B4XSerializator
-	Return ser.ConvertBytesToObject(ser.ConvertObjectToBytes(xo))
-End Sub
-
-' Merge another MinimaList as a new MinimaList
-Public Sub Merge (ML As MinimaList, key1 As String, key2 As String) As MinimaList
-	Dim L1 As List = CopyObject(mList)
-	Dim L2 As List = CopyObject(ML.List)
-	For Each M1 As Map In L1
-		For Each M2 As Map In L2
-			' Convert to String type
-			Dim value1 As String = M1.Get(key1)
-			Dim value2 As String = M2.Get(key2)
-			If mCaseSensitive Then
-				If value1 = value2 Then
-					For Each key As String In M2.Keys
-						If M1.ContainsKey(key) = False Then
-							M1.Put(key, M2.Get(key))
-						End If
-					Next
-				End If
-			Else
-				If value1.EqualsIgnoreCase(value2) Then
-					For Each key As String In M2.Keys
-						If M1.ContainsKey(key) = False Then
-							M1.Put(key, M2.Get(key))
-						End If
-					Next
-				End If
-			End If
-		Next
-	Next
-	Return CreateFromList(L1)
+	Return ser.ConvertBytesToObject(ser.ConvertObjectToBytes(O))
 End Sub
 
 ' Count items where value of a key is equals to id
@@ -150,146 +109,20 @@ Public Sub CountById (key As String, id As Int) As Int
 	Return count
 End Sub
 
-' Remove item by index
-Public Sub Remove (index As Int)
-	If index < mList.Size And index > -1 Then
-		mList.RemoveAt(index)
-		ResetFirstAndLast
-	End If
+' Create a new MinimaList from a List
+Private Sub CreateFromList (L As List) As MinimaList
+	Dim ML As MinimaList
+	ML.Initialize
+	ML.List = CopyObject(L)
+	Return ML
 End Sub
 
-' Remove item by passing a Map object
-Public Sub Remove2 (M As Map)
-	Dim index As Int = IndexFromMap(M)
-	Remove(index)
-End Sub
-
-' Remove key in Map by index
-Public Sub RemoveKey (key As String, index As Int)
-	Dim M1 As Map = mList.Get(index)
-	RemoveKey2(key, M1)
-End Sub
-
-' Remove key in Map by passing a Map object
-Public Sub RemoveKey2 (key As String, M As Map)
-	If M.ContainsKey(key) Then
-		M.Remove(key)
-	End If
-End Sub
-
-' Get index of item by Map object
-Public Sub IndexFromMap (M As Map) As Int
-	For i = 0 To mList.Size - 1
-		Dim M1 As Map = mList.Get(i)
-		If M1.ContainsKey("id") And M.ContainsKey("id") Then
-			If M1.Get("id") = M.Get("id") Then
-				Return i
-			End If
-		End If
-	Next
-	Return -1
-End Sub
-
-' Get index of item by id key
-Public Sub IndexFromId (id As Int) As Int
-	For i = 0 To mList.Size - 1
-		Dim M1 As Map = mList.Get(i)
-		If M1.ContainsKey("id") And id = M1.Get("id") Then
-			Return i
-		End If
-	Next
-	Return -1
-End Sub
-
-' Find first item based on id key
-Public Sub Find (id As Int) As Map
-	For Each M1 As Map In mList
-		If M1.ContainsKey("id") And id = M1.Get("id") Then
-			Return M1
-		End If
-	Next
-	Return CreateMap()
-End Sub
-
-' Find first item (initialized map) based on a key
-Public Sub FindByKey (key As String, value As Object) As Map
-	For Each M1 As Map In mList
-		If M1.ContainsKey(key) And value = M1.Get(key) Then
-			Return M1
-		End If
-	Next
-	Return CreateMap()
-End Sub
-
-' Find first item where list of all keys and values matched
-Public Sub FindFirst (keys As List, values As List) As Map
-	For Each M1 As Map In mList
-		Dim matched As Int
-		For k = 0 To keys.Size - 1
-			Dim key As String = keys.Get(k)
-			Dim value As Object = values.Get(k)
-			If M1.ContainsKey(key) = False Then Exit
-			Dim value1 As String = M1.Get(key)
-			Dim value2 As String = value
-			If mCaseSensitive Then
-				If value1 = value2 Then matched = matched + 1
-			Else
-				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
-			End If
-		Next
-		If matched = keys.Size Then Return M1
-	Next
-	Return CreateMap()
-End Sub
-
-' Find more than one item as list where all keys and values must matched
-Public Sub FindAll (keys As List, values As List) As List
-	Dim L1 As List
-	L1.Initialize
-	For Each M1 As Map In mList
-		Dim matched As Int
-		For k = 0 To keys.Size - 1
-			Dim key As String = keys.Get(k)
-			Dim value As Object = values.Get(k)
-			If M1.ContainsKey(key) = False Then Exit
-			Dim value1 As String = M1.Get(key)
-			Dim value2 As String = value
-			If mCaseSensitive Then
-				If value1 = value2 Then matched = matched + 1
-			Else
-				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
-			End If
-		Next
-		If matched = keys.Size Then L1.Add(M1)
-	Next
-	Return L1
-End Sub
-
-' Find more than one item as list where at least value of one key contains given value
-Public Sub FindAnyLike (keys As List, values As List) As List
-	Dim L1 As List
-	L1.Initialize
-	For Each M1 As Map In mList
-		For k = 0 To keys.Size - 1
-			Dim key As String = keys.Get(k)
-			Dim value As Object = values.Get(k)
-			If M1.ContainsKey(key) = False Then Exit
-			Dim value1 As String = M1.Get(key)
-			Dim value2 As String = value
-			If mCaseSensitive Then
-				If value1.Contains(value2) Then
-					L1.Add(M1)
-					Exit
-				End If
-			Else
-				If value1.ToLowerCase.Contains(value2.ToLowerCase) Then
-					L1.Add(M1)
-					Exit
-				End If
-			End If
-		Next
-	Next
-	Return L1
+Private Sub CreateType (id As Int, value As Object) As mType
+	Dim t1 As mType
+	t1.Initialize
+	t1.id = id
+	t1.value = value
+	Return t1
 End Sub
 
 ' Exclude item based on id key
@@ -359,14 +192,119 @@ Public Sub ExcludeAny (keys As List, values As List) As List
 	Return mList
 End Sub
 
-Public Sub Reverse As MinimaList
+' Find first item based on id key
+Public Sub Find (id As Int) As Map
+	For Each M1 As Map In mList
+		If M1.ContainsKey("id") And id = M1.Get("id") Then
+			Return M1
+		End If
+	Next
+	Return CreateMap()
+End Sub
+
+' Find more than one item as list where all keys and values must matched
+Public Sub FindAll (keys As List, values As List) As List
 	Dim L1 As List
 	L1.Initialize
-	For i = mList.Size - 1 To 0 Step - 1
-		L1.Add(mList.Get(i))
+	For Each M1 As Map In mList
+		Dim matched As Int
+		For k = 0 To keys.Size - 1
+			Dim key As String = keys.Get(k)
+			Dim value As Object = values.Get(k)
+			If M1.ContainsKey(key) = False Then Exit
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1 = value2 Then matched = matched + 1
+			Else
+				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
+			End If
+		Next
+		If matched = keys.Size Then L1.Add(M1)
 	Next
-	setList(L1)
-	Return Me
+	Return L1
+End Sub
+
+' Find more than one item as list where at least value of one key contains given value
+Public Sub FindAnyLike (keys As List, values As List) As List
+	Dim L1 As List
+	L1.Initialize
+	For Each M1 As Map In mList
+		For k = 0 To keys.Size - 1
+			Dim key As String = keys.Get(k)
+			Dim value As Object = values.Get(k)
+			If M1.ContainsKey(key) = False Then Exit
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1.Contains(value2) Then
+					L1.Add(M1)
+					Exit
+				End If
+			Else
+				If value1.ToLowerCase.Contains(value2.ToLowerCase) Then
+					L1.Add(M1)
+					Exit
+				End If
+			End If
+		Next
+	Next
+	Return L1
+End Sub
+
+' Find first item (initialized map) based on a key
+Public Sub FindByKey (key As String, value As Object) As Map
+	For Each M1 As Map In mList
+		If M1.ContainsKey(key) And value = M1.Get(key) Then
+			Return M1
+		End If
+	Next
+	Return CreateMap()
+End Sub
+
+' Find first item where list of all keys and values matched
+Public Sub FindFirst (keys As List, values As List) As Map
+	For Each M1 As Map In mList
+		Dim matched As Int
+		For k = 0 To keys.Size - 1
+			Dim key As String = keys.Get(k)
+			Dim value As Object = values.Get(k)
+			If M1.ContainsKey(key) = False Then Exit
+			Dim value1 As String = M1.Get(key)
+			Dim value2 As String = value
+			If mCaseSensitive Then
+				If value1 = value2 Then matched = matched + 1
+			Else
+				If value1.EqualsIgnoreCase(value2) Then matched = matched + 1
+			End If
+		Next
+		If matched = keys.Size Then Return M1
+	Next
+	Return CreateMap()
+End Sub
+
+' Get index of item by id key
+Public Sub IndexFromId (id As Int) As Int
+	For i = 0 To mList.Size - 1
+		Dim M1 As Map = mList.Get(i)
+		If M1.ContainsKey("id") And id = M1.Get("id") Then
+			Return i
+		End If
+	Next
+	Return -1
+End Sub
+
+' Get index of item by Map object
+Public Sub IndexFromMap (M As Map) As Int
+	For i = 0 To mList.Size - 1
+		Dim M1 As Map = mList.Get(i)
+		If M1.ContainsKey("id") And M.ContainsKey("id") Then
+			If M1.Get("id") = M.Get("id") Then
+				Return i
+			End If
+		End If
+	Next
+	Return -1
 End Sub
 
 Public Sub Limit (size As Int) As MinimaList
@@ -379,12 +317,82 @@ Public Sub Limit (size As Int) As MinimaList
 	Return CreateFromList(L1)
 End Sub
 
-' Check list contains specified key
-Public Sub ContainsKey (key As String) As Boolean
-	For Each M1 As Map In mList
-		If M1.ContainsKey(key) Then Return True
+' Merge another MinimaList as a new MinimaList
+Public Sub Merge (ML As MinimaList, key1 As String, key2 As String) As MinimaList
+	Dim L1 As List = CopyObject(mList)
+	Dim L2 As List = CopyObject(ML.List)
+	For Each M1 As Map In L1
+		For Each M2 As Map In L2
+			' Convert to String type
+			Dim value1 As String = M1.Get(key1)
+			Dim value2 As String = M2.Get(key2)
+			If mCaseSensitive Then
+				If value1 = value2 Then
+					For Each key As String In M2.Keys
+						If M1.ContainsKey(key) = False Then
+							M1.Put(key, M2.Get(key))
+						End If
+					Next
+				End If
+			Else
+				If value1.EqualsIgnoreCase(value2) Then
+					For Each key As String In M2.Keys
+						If M1.ContainsKey(key) = False Then
+							M1.Put(key, M2.Get(key))
+						End If
+					Next
+				End If
+			End If
+		Next
 	Next
-	Return False
+	Return CreateFromList(L1)
+End Sub
+
+' Remove item by index
+Public Sub Remove (index As Int)
+	If index < mList.Size And index > -1 Then
+		mList.RemoveAt(index)
+		ResetFirstAndLast
+	End If
+End Sub
+
+' Remove item by passing a Map object
+Public Sub Remove2 (M As Map)
+	Dim index As Int = IndexFromMap(M)
+	Remove(index)
+End Sub
+
+' Remove key in Map by index
+Public Sub RemoveKey (key As String, index As Int)
+	Dim M1 As Map = mList.Get(index)
+	RemoveKey2(key, M1)
+End Sub
+
+' Remove key in Map by passing a Map object
+Public Sub RemoveKey2 (key As String, M As Map)
+	If M.ContainsKey(key) Then
+		M.Remove(key)
+	End If
+End Sub
+
+Private Sub ResetFirstAndLast
+	If mList.Size = 0 Then
+		mFirst.Clear
+		mLast.Clear
+	Else
+		mFirst = mList.Get(0)
+		mLast = mList.Get(mList.Size - 1)
+	End If
+End Sub
+
+Public Sub Reverse As MinimaList
+	Dim L1 As List
+	L1.Initialize
+	For i = mList.Size - 1 To 0 Step - 1
+		L1.Add(mList.Get(i))
+	Next
+	setList(L1)
+	Return Me
 End Sub
 
 ' Assume all items contain key to sort
@@ -419,32 +427,6 @@ Public Sub SortByKey2 (key As String, ascending As Boolean, default As Object)
 	setList(L2)
 End Sub
 
-Private Sub ResetFirstAndLast
-	If mList.Size = 0 Then
-		mFirst.Clear
-		mLast.Clear
-	Else
-		mFirst = mList.Get(0)
-		mLast = mList.Get(mList.Size - 1)
-	End If
-End Sub
-
 'Private Sub IsString (O As Object) As Boolean
 '	Return Initialized(O) And GetType(O) = "java.lang.String"
 'End Sub
-
-' Create a new MinimaList from a List
-Private Sub CreateFromList (L As List) As MinimaList
-	Dim ML As MinimaList
-	ML.Initialize
-	ML.List = CopyObject(L)
-	Return ML
-End Sub
-
-Private Sub CreateType (id As Int, value As Object) As mType
-	Dim t1 As mType
-	t1.Initialize
-	t1.id = id
-	t1.value = value
-	Return t1
-End Sub

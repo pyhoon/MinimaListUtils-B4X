@@ -19,7 +19,7 @@ Version=10.45
 #Macro: Title, Copy to AddLibs, ide://run?file=%COMSPEC%&args=/c&args=copy&args=%PROJECT%\..\release\*.b4xlib&args=%ADDITIONAL%\..\B4X
 #End Region
 #If Release
-#CustomBuildAction: 2, %JAVABIN%\jar.exe, -cMf ..\..\..\release\%PROJECT_NAME%.b4xlib ..\..\MinimaList.bas ..\..\..\manifest.txt ..\..\..\LICENSE
+#CustomBuildAction: 2, %JAVABIN%\jar.exe, -cMf ..\..\release\%PROJECT_NAME%.b4xlib ..\Snippets ..\MinimaList.bas ..\manifest.txt
 #End If
 Sub Process_Globals
 	'Type Member (name As String, age As Int)
